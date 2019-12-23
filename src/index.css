@@ -1,13 +1,172 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+* {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  outline: none;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+html {
+  font-size: 10px;
 }
+
+body {
+  margin: 0;
+  font-family: 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+  background: #e6e7e8;
+  font-size: 1.6rem;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.font--nunito {
+  font-family: 'Nunito', sans-serif;
+}
+
+.container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+}
+
+ul {
+  padding-left: 0;
+  margin: 0;
+}
+
+.flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.aic {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.jcc {
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.jc-sb {
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.jc-sa {
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+.flex-col {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.flex-1 {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+.primary-btn {
+  background: #c82828;
+  color: #fff;
+  padding: 10px 12px 8px;
+  font-weight: 700;
+  -webkit-box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.15);
+          box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.15);
+  -webkit-transition: background .1s, -webkit-box-shadow 0.2s linear, -webkit-transform .1s;
+  transition: background .1s, -webkit-box-shadow 0.2s linear, -webkit-transform .1s;
+  transition: box-shadow 0.2s linear, transform .1s, background .1s;
+  transition: box-shadow 0.2s linear, transform .1s, background .1s, -webkit-box-shadow 0.2s linear, -webkit-transform .1s;
+}
+
+.primary-btn:hover {
+  background: #c22121;
+}
+
+.primary-btn:active {
+  -webkit-transform: translate(1px, 1px);
+          transform: translate(1px, 1px);
+  -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.15);
+          box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.15);
+}
+
+.btn-link {
+  background: none;
+  text-decoration: underline;
+}
+
+.loader {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.loader__animation {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 10px;
+  border-radius: 100px;
+  border: 0 solid #747474;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  -webkit-animation: loader__animation 2s linear infinite;
+          animation: loader__animation 2s linear infinite;
+}
+
+@-webkit-keyframes loader__animation {
+  0% {
+    border-width: 0;
+  }
+  50% {
+    border-width: 30px;
+  }
+  100% {
+    border-width: 0;
+  }
+}
+
+@keyframes loader__animation {
+  0% {
+    border-width: 0;
+  }
+  50% {
+    border-width: 30px;
+  }
+  100% {
+    border-width: 0;
+  }
+}
+/*# sourceMappingURL=index.css.map */
