@@ -35,16 +35,9 @@ class App extends Component {
     fetch("https://api.myjson.com/bins/qubzl")
     .then(response => response.json())
     .then(data => {
-        let obj = {status: '', lessonCompleted: false};
-        let myActivities = JSON.parse(localStorage.getItem('reactSpa')) || JSON.parse(JSON.stringify(data));
+        //let myActivities = JSON.parse(localStorage.getItem('reactSpa')) || JSON.parse(JSON.stringify(data));
+        let myActivities = data;
         let main = myActivities.lessonDetails;
-        main.map((el) =>{
-            return (
-              el.objectiveDetails.map((el2) => {
-                return el2.activities.push(obj);
-              })
-            )
-        });
         this.setState({
           loading:false, 
           activity: myActivities,
@@ -56,8 +49,17 @@ class App extends Component {
           localStorage.setItem('reactSpa', JSON.stringify(this.state.activity));
         }
         const totalList = {lesson:''};
+        let obj = {status: '', lessonCompleted: false};
         this.state.activity.lessonDetails.map((value) =>{
-          return this.state.completed.push(totalList);
+            //this.state.activities.push(obj);
+            return this.state.completed.push(totalList);
+        });
+        main.map((el) =>{
+          return (
+            el.objectiveDetails.map((el2) => {
+              return el2.activities.push(obj);
+            })
+          )
         });
         //console.log(this.state.activity);
         
