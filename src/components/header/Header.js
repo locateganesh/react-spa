@@ -5,7 +5,8 @@ class Header extends Component {
     render(props){
         const initial = this.props;
         const data = initial.activity;
-        //const isComplted = initial.completed[initial.id] !== null ? initial.completed[initial.id] : '';
+        //console.log(initial.projectId);
+
         return(
             <header className="header flex aic">
 
@@ -23,13 +24,11 @@ class Header extends Component {
                         <p className="header__menu-hint">Lessons</p>
                         <ul className="header__menu">
                             {data.lessonDetails.map((counter, index) => {
-                                //const totalActive = counter.objectiveDetails[0].activities;
-                                //console.log(initial.completed[index].lesson); 
                                 return (
                                     <li key={counter.id}>
                                         <button 
                                             onClick={initial.lessionEvents.bind(this, index)} 
-                                            className={`menu__link ${initial.id === index ? 'active' : ''} ${initial.completed.length >= 1 ? initial.completed[index].lesson : ''}`} 
+                                            className={`menu__link ${initial.id === index ? 'active' : ''} ${initial.completed.length >= 1 ? initial.completed[index].isFinished : ''}`} 
                                             type="button">
                                             {index+1}
                                         </button> 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Header from './components/Header';
-import Lectures from './components/Lectures';
+import Header from './components/header/Header';
+import Lectures from './components/lecture/Lectures';
 
 class App extends Component {
   constructor(props) {
@@ -15,9 +15,8 @@ class App extends Component {
       isPlaying:false, // Player is not playing by default.
       isPause:'isPause', // A class adding and removing depending on video play and pause.
       openModel: false,
-      active1: 0,
-      active2: 0,
-      completed:[]
+      completed:[],
+      active:[]
     }
   }  
 
@@ -37,38 +36,59 @@ class App extends Component {
     .then(data => {
         //let myActivities = JSON.parse(localStorage.getItem('reactSpa')) || JSON.parse(JSON.stringify(data));
         let myActivities = data;
-        let main = myActivities.lessonDetails;
         this.setState({
           loading:false, 
           activity: myActivities,
           url: myActivities.lessonDetails[this.state.id].objectiveDetails[0].objectiveVideosDetails[0].url // First lesson first video is getting assigned.
         });
-        //console.log(this.state.activity);
+
+        // Looping though lesson and objective length and creating a default state for lesson status.
+        const projectLength = this.state.activity.lessonDetails.length;
+        let lessons = [...this.state.active];
+        let isCompleted = [...this.state.completed];
+        for(let i = 0; i < projectLength; i++){
+          lessons.push({ lesson: [] }); 
+          isCompleted.push({isFinished: ''});
+          const objLength = this.state.activity.lessonDetails[i].objectiveDetails;
+          for(let j=0; j < objLength.length; j++){
+            lessons[i].lesson.push({isStatus: ''}); //storing empty objects depending on data.
+          }
+        }
+        this.setState({ active: lessons, completed: isCompleted });
+
         //Storing data in localStorage for state management. Clearable by exit session
         if(localStorage.getItem("reactSpa") === null){
           localStorage.setItem('reactSpa', JSON.stringify(this.state.activity));
         }
-        const totalList = {lesson:''};
-        let obj = {status: '', lessonCompleted: false};
-        this.state.activity.lessonDetails.map((value) =>{
-            //this.state.activities.push(obj);
-            return this.state.completed.push(totalList);
-        });
-        main.map((el) =>{
-          return (
-            el.objectiveDetails.map((el2) => {
-              return el2.activities.push(obj);
-            })
-          )
-        });
-        //console.log(this.state.activity);
-        
-    })
+
+    });
   }
 
   // On click exit session Clear localStorage data for this App.
   clearStoage(){
     localStorage.clear('reactSpa');
+
+    let clearProgress = [...this.state.completed]; // clear lesson complete data.
+    let clearLesson = [...this.state.active];
+    
+
+    for(var i = 0; i < clearProgress.length; i++){
+      clearProgress[i].isFinished = '';
+      const objLength = this.state.activity.lessonDetails[i].objectiveDetails;
+      for(let j=0; j < objLength.length; j++){
+        clearLesson[i].lesson[j].isStatus = ''; // clear lessons data.
+      }
+    }
+
+    this.setState({
+      id: 0,
+      url: this.state.activity.lessonDetails[this.state.id].objectiveDetails[0].objectiveVideosDetails[0].url,
+      projectId: 0,
+      active: clearLesson, 
+      completed: clearProgress,
+      playing: false,
+      isPause: 'isPause'
+    })
   }
 
   // Lesson menu (header) links click event.
@@ -77,9 +97,7 @@ class App extends Component {
       id: index, 
       url: this.state.url,
       isPlaying:false,
-      projectId: 0,
-      active1:0,
-      active2:0
+      projectId: 0
     });
   }
 
@@ -103,68 +121,36 @@ class App extends Component {
     this.setState({isPause: 'isPlay', playing: true });
   }
 
+  // on video end state becomes completed
+  playerOnEnd(id, index){
+    let onEndState = [...this.state.active];
+    let onEndComplete = [...this.state.completed];
+    onEndState[id].lesson[index].isStatus = 'done';
+
+    const allSelected = onEndState[id].lesson.map((el) => {
+      return el.isStatus !== '';
+    }).every((i) => { return i; });
+    allSelected ? onEndComplete[id].isFinished = 'completed' : onEndComplete[id].isFinished = '';
+    this.setState({ active: onEndState, completed: onEndComplete }); 
+  }
+
   // To pause video
   playerOnPause(){
     this.setState({isPause: 'isPause', playing: false })
   }
 
-  // lesson done button event
-  // I know I am laoding all the API javaScript. But I wan't getting any better way to do it. 
+  // lesson done button event 
   lessionDoneEvent(index, status, id){
-
-    this.setState({
-      active1: id, 
-      active2: index
-    });
-
-    let stateCopy = Object.assign({}, this.state.activity);
-    stateCopy.lessonDetails[id].objectiveDetails[index].activities[0].status = status;
-    stateCopy.lessonDetails[id].objectiveDetails[index].activities[0].lessonCompleted = true;
-    this.setState(stateCopy);
-
-    //const totalLessons = this.state.activity.lessonDetails[id].objectiveDetails;
-    /*let totalObj = false;
-    let isTrue = '';
-    totalObj = totalLessons.map((object) => {
-        return object.activities[0].lessonCompleted;
-    }).every((val, i, arr) => val === arr[0]);
-    totalObj ? isTrue = 'completed' : isTrue = '';
-    */
-
-    //console.log(this.state.completed);
-    //let stateComplete = Object.assign({}, this.state.completed);
-    //stateComplete[id].lesson = isTrue;
-    //console.log(stateComplete[id]);
-    //this.setState({stateComplete});
-    /*this.setState(prevState => ({
-      stateComplete: [...prevState.stateComplete, {"lesson": isTrue}]
-    }))*/
     
+    const progress = [...this.state.active];
+    const isAllSelected = [...this.state.completed];
+    progress[id].lesson[index].isStatus = status;
 
-
-    /*//let obj = {status: '', lessonCompleted: ''};
-    let myActivities = JSON.parse(JSON.stringify(this.state.activity));
-    let main = myActivities.lessonDetails[id].objectiveDetails[index];
-    
-    //main.activities.push(obj);
-    main.activities[0].status = status;
-    let totalObj = false;
-
-    //console.log(id);
-    if(main.activities.length >= 1){
-      const totalLessons = myActivities.lessonDetails[id].objectiveDetails;
-      totalObj = totalLessons.map((object) => {
-        return object.activities.length === 1;
-      }).every((val, i, arr) => val === arr[0]);
-    }
-    main.activities[0].lessonCompleted = totalObj;
-
-    console.log(myActivities);
-
-    this.setState({
-      activity: myActivities
-    });
-    */
+    const allSelected = progress[id].lesson.map((el) => {
+        return el.isStatus !== '';
+    }).every((i) => { return i; });
+    allSelected ? isAllSelected[id].isFinished = 'completed' : isAllSelected[id].isFinished = '';
+    this.setState({ active: progress, completed: isAllSelected });
   }
 
   // class flow open popup
@@ -215,6 +201,7 @@ class App extends Component {
               videoThumbnails={this.videoThumbnail.bind(this)} 
               handlePlay={this.playerOnPlay.bind(this)}
               handlePause={this.playerOnPause.bind(this)}
+              handleEnd={this.playerOnEnd.bind(this)}
               lessionDoneEvents={this.lessionDoneEvent.bind(this)}
               openModals={ this.openModal.bind(this) }
               closeModals={ this.closeModal.bind(this) }

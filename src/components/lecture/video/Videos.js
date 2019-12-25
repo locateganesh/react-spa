@@ -22,6 +22,7 @@ class Videos extends Component {
         const { url, playing } = this.props; // Getting videos default properties from app conmponets. 
         const thumbnails = this.props.activity.lessonDetails[initial.id].objectiveDetails; // Getting the lession data from its state and state id.
         const vidData = thumbnails[initial.projectId];
+        
         return (
             <div className={`playerHolder flex-1 ${initial.isPause}`}>
                 {/* Common image cover for videos. */}
@@ -35,14 +36,14 @@ class Videos extends Component {
                     {thumbnails.map((allVideos, index) => {
                         const currentVid = allVideos.objectiveVideosDetails[0].url;
                         return(
-                            <li key={allVideos.id} onClick={initial.videoThumbnails.bind(this, currentVid, index)}><img src="./img/image-thumbnail.jpg" alt={allVideos.title} data-vid={currentVid} /></li> 
+                            <li key={allVideos.id} onClick={initial.videoThumbnails.bind(this, currentVid, index)}><img className={initial.projectId === index ? 'activeVideo' : ''} src="./img/image-thumbnail.jpg" alt={allVideos.title} /></li> 
                         )
                     })}
                 </ul>
 
                 {/* Activties and classFlow. Visibility depends of data. */}    
                 <div className="activity">
-                    <div style={{display: 'none'}}>
+                    <div style={{display: vidData.activitiesDetails < 1 ? 'none': ''}}>
                         <Activity {...initial} data={{image: './img/activity.png', alt: 'View Activity'}} />
                     </div>
                     <div style={{display: vidData.reference==='' && (vidData.classFlow==='' || vidData.classFlow==='-') ? 'none' : ''}}>
@@ -57,6 +58,7 @@ class Videos extends Component {
                     playing={playing}
                     onPlay={initial.handlePlay.bind(this)} 
                     onPause={initial.handlePause.bind(this)}
+                    onEnded={initial.handleEnd.bind(this, initial.id, initial.projectId)}
                     width="100%"
                     height="100%"
                 />

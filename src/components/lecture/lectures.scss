@@ -23,6 +23,9 @@
   margin:4px 5px;
   padding: 8px 8px 7px;
   font-size: 1.1rem;
+  &.activeVideo{ 
+    transform: scale(1.12);
+  }
 }
 .sidebar__inner{
   padding:15px 15px 25px; 
@@ -98,9 +101,6 @@
 .playerHolder{
   position: relative;
 }
-.video-iframe{
-    // background:#8a8b8b;
-}
 .video-iframe, .video-iframe iframe{
     border: 0;
     width: 100%;
@@ -167,6 +167,9 @@
     img{
         width:80px;
         cursor: pointer;
+        &.activeVideo{
+          transform: scale(1.15);
+        }  
     }
 }
 .isPlay{

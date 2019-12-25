@@ -4,7 +4,6 @@ class Modal extends Component{
     render(props){
         const initial = this.props;
         const data = initial.activeState[initial.projectId];
-        //console.log(initial.id);
         return (
             <div className={`overlay ${this.props.openModel ? 'showPopup': ''}`}>
                 <div className="overlay__inner flex aic jcc">

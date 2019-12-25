@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Sidebar from './Sidebar';
-import Videos from './Videos';
+import Sidebar from './sidebar/Sidebar';
+import Videos from './video/Videos';
 import './lectures.css'; // video player and container common styling
 
 class Lectures extends Component {

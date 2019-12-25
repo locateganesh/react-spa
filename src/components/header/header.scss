@@ -1,7 +1,6 @@
 $main-color: #ba0d5c;
 $orange-color: #ff9811;
 
-
 @mixin rounded($radius: 100%) {
     border-radius:$radius;
 }
