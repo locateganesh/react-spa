@@ -56,7 +56,7 @@ class App extends Component {
         }
         this.setState({ active: lessons, completed: isCompleted });
 
-        //Storing data in localStorage for state management. Clearable by exit session
+        //Storing data in localStorage. Clearable by exit session
         if(localStorage.getItem("reactSpa") === null){
           localStorage.setItem('reactSpa', JSON.stringify(this.state.activity));
         }
@@ -70,8 +70,6 @@ class App extends Component {
 
     let clearProgress = [...this.state.completed]; // clear lesson complete data.
     let clearLesson = [...this.state.active];
-    
-
     for(var i = 0; i < clearProgress.length; i++){
       clearProgress[i].isFinished = '';
       const objLength = this.state.activity.lessonDetails[i].objectiveDetails;
@@ -131,7 +129,8 @@ class App extends Component {
       return el.isStatus !== '';
     }).every((i) => { return i; });
     allSelected ? onEndComplete[id].isFinished = 'completed' : onEndComplete[id].isFinished = '';
-    this.setState({ active: onEndState, completed: onEndComplete }); 
+    this.setState({ active: onEndState, completed: onEndComplete });
+    
   }
 
   // To pause video
