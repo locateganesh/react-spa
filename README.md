@@ -16,4 +16,4 @@ After done the project. Build the project for production version using...
 	
 	`npm run build` 
 
-[DEMO](https://react-spa2.netlify.com/)
+[DEMO](https://react-spa.netlify.app/)
