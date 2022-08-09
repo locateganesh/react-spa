@@ -5,7 +5,7 @@ class Sidebar extends Component {
     render(props){
         const initial = this.props;
         const updateActivity = initial.activity.lessonDetails[initial.id]; // Active state data.
-        
+        //console.log("initial", initial.status)
         return(
             <aside className="sidebar">
                 <h2 className="sidebar__title">{updateActivity.lessonTitle}</h2>
@@ -29,7 +29,7 @@ class Sidebar extends Component {
                     {/* Lesson details and its progress */}
                     {updateActivity.objectiveDetails.map((vidObj, index) => {
                         return (
-                            <div className={`sidebar__actions ${initial.active.length >= 1 ? initial.active[initial.id].lesson[index].isStatus : ''}`} key={index}>
+                            <div className={`sidebar__actions ${initial.status[initial.id].chaptors[index].isStatus}`} key={index}>
                                 <h3>{vidObj.title} <span>({vidObj.durationInMinutes} <MinToMins value="vidObj.durationInMinutes" />)</span></h3>
                                 <ul className="actions__btns flex jc-sa">
                                     <ActivityLists {...initial} actData={{id:initial.id, currentId: index, status:'done', title:'Done'}} />

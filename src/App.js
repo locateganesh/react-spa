@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Header from './components/header/Header';
 import Lectures from './components/lecture/Lectures';
+import JsonData from './qubzl.json';
+
 
 class App extends Component {
   constructor(props) {
@@ -15,22 +17,34 @@ class App extends Component {
       isPlaying:false, // Player is not playing by default.
       isPause:'isPause', // A class adding and removing depending on video play and pause.
       openModel: false,
-      completed:[],
-      active:[]
+      status: []
     }
+    
   }  
 
-  /*load = url => {
-    this.setState({
-      url: this.props.url,
-      playing: this.props.isPlay,
-      played: 0,
-      loaded: 0
-    })
-  }*/
-  
-  // Fatching API data and storing it state.
+
   componentDidMount = () => {
+    const myActivities = JsonData;
+    console.log(myActivities);
+    this.setState({
+      loading:false, 
+      activity: myActivities,
+      url: myActivities.lessonDetails[0]?.objectiveDetails[0]?.objectiveVideosDetails[0]?.url // First lesson first video is getting assigned.
+    });
+    //console.log(myActivities, this.state.id, myActivities.lessonDetails[0].objectiveDetails[0].objectiveVideosDetails[0].url);
+
+    const lectureArray = [];
+    myActivities.lessonDetails.forEach((item, index) => {
+      let chaptors = [];
+      item.objectiveDetails.forEach((it, i) => {
+        chaptors.push({id: i, active: false, completed: false, isStatus: '' });
+      });
+      lectureArray.push({id: index, active: false, completed: false, totalChaptor: item?.objectiveDetails?.length, chaptors: chaptors});
+    });
+    this.setState({status: [...lectureArray]});
+    //console.log(this.state.status, lectureArray);
+
+    /*
     fetch("https://api.myjson.com/bins/qubzl")
     .then(response => response.json())
     .then(data => {
@@ -62,28 +76,16 @@ class App extends Component {
         }
 
     });
+    */
   }
 
   // On click exit session Clear localStorage data for this App.
-  clearStoage(){
-    localStorage.clear('reactSpa');
-
-    let clearProgress = [...this.state.completed]; // clear lesson complete data.
-    let clearLesson = [...this.state.active];
-    for(var i = 0; i < clearProgress.length; i++){
-      clearProgress[i].isFinished = '';
-      const objLength = this.state.activity.lessonDetails[i].objectiveDetails;
-      for(let j=0; j < objLength.length; j++){
-        clearLesson[i].lesson[j].isStatus = ''; // clear lessons data.
-      }
-    }
-
+  clearStoage() {
     this.setState({
       id: 0,
-      url: this.state.activity.lessonDetails[this.state.id].objectiveDetails[0].objectiveVideosDetails[0].url,
+      url: this.state.activity.lessonDetails[0].objectiveDetails[0].objectiveVideosDetails[0].url,
       projectId: 0,
-      active: clearLesson, 
-      completed: clearProgress,
+      status: [],
       playing: false,
       isPause: 'isPause'
     })
@@ -120,36 +122,38 @@ class App extends Component {
   }
 
   // on video end state becomes completed
-  playerOnEnd(id, index){
-    let onEndState = [...this.state.active];
-    let onEndComplete = [...this.state.completed];
-    onEndState[id].lesson[index].isStatus = 'done';
-
-    const allSelected = onEndState[id].lesson.map((el) => {
-      return el.isStatus !== '';
+  playerOnEnd(id, index) {
+    let updateStatus = [...this.state.status];
+    updateStatus[id].chaptors[index] = {
+      completed: true,
+      isStatus: 'done'
+    };
+    const allSelected = updateStatus[id].chaptors.map((el) => {
+      return el.completed;
     }).every((i) => { return i; });
-    allSelected ? onEndComplete[id].isFinished = 'completed' : onEndComplete[id].isFinished = '';
-    this.setState({ active: onEndState, completed: onEndComplete });
-    
+    updateStatus[id].completed = allSelected;
+    this.setState({status: updateStatus});
   }
 
   // To pause video
   playerOnPause(){
-    this.setState({isPause: 'isPause', playing: false })
+    this.setState({isPause: 'isPause', playing: false });
   }
 
   // lesson done button event 
-  lessionDoneEvent(index, status, id){
-    
-    const progress = [...this.state.active];
-    const isAllSelected = [...this.state.completed];
-    progress[id].lesson[index].isStatus = status;
-
-    const allSelected = progress[id].lesson.map((el) => {
-        return el.isStatus !== '';
+  lessionDoneEvent(index, status, id) {
+    let updateStatus = [...this.state.status];
+    updateStatus[id].chaptors[index] = {
+      ...updateStatus[id].chaptors[index],
+      completed: true,
+      isStatus: status
+    };
+    const allSelected = updateStatus[id].chaptors.map((el) => {
+      return el.completed;
     }).every((i) => { return i; });
-    allSelected ? isAllSelected[id].isFinished = 'completed' : isAllSelected[id].isFinished = '';
-    this.setState({ active: progress, completed: isAllSelected });
+    updateStatus[id].completed = allSelected;
+    //console.log(updateStatus, allSelected);
+    this.setState({status: updateStatus, isPause: 'isPause'});
   }
 
   // class flow open popup
@@ -167,6 +171,7 @@ class App extends Component {
   }
 
   render() {
+    //console.log(this.state.status);
     return (
       <section className="App">
 

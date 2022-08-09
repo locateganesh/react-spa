@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import './header.css'; // Header css from scss for header component style.
 
 class Header extends Component {
-    render(props){
+    render(props) {
         const initial = this.props;
         const data = initial.activity;
-        //console.log(initial.projectId);
+        console.log(initial.status);
 
         return(
             <header className="header flex aic">
@@ -25,10 +25,10 @@ class Header extends Component {
                         <ul className="header__menu">
                             {data.lessonDetails.map((counter, index) => {
                                 return (
-                                    <li key={counter.id}>
+                                    <li key={counter.id}> {/* ${initial.status === index ? 'active' : ''} ${initial.completed.length >= 1 ? initial.completed[index].isFinished : ''} */}
                                         <button 
                                             onClick={initial.lessionEvents.bind(this, index)} 
-                                            className={`menu__link ${initial.id === index ? 'active' : ''} ${initial.completed.length >= 1 ? initial.completed[index].isFinished : ''}`} 
+                                            className={`menu__link ${initial.id === index ? 'active': ''} ${initial.status[index].completed ? 'completed' : ''}`}  
                                             type="button">
                                             {index+1}
                                         </button> 

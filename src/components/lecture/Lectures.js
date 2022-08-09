@@ -8,8 +8,8 @@ class Lectures extends Component {
         return (
             <div className="lectures flex">
                 {/* Sidebar and video container components and its properties being inherited from app component using ES6 spread operator. */}
-                <Sidebar {...this.props} {...this.state} />
-                <Videos {...this.props} {...this.state} />
+                <Sidebar {...this.props}  />
+                <Videos {...this.props} />
             </div>
         )
     }
